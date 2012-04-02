@@ -1,0 +1,1720 @@
+REUTERS-ADH-MIB DEFINITIONS ::= BEGIN
+ 
+-- 
+-- Reuters RMDS ADH MIB Definition
+-- 
+ 
+IMPORTS
+
+	OBJECT-TYPE, NOTIFICATION-TYPE, MODULE-IDENTITY, Integer32, Counter32, enterprises FROM SNMPv2-SMI
+
+	TruthValue FROM SNMPv2-TC;
+
+         adh	MODULE-IDENTITY
+LAST-UPDATED	"0909161425Z"
+ORGANIZATION	"Thomson Reuters"
+CONTACT-INFO	"System Management Team"
+ DESCRIPTION	"This MIB module is for adh"
+
+    REVISION	"0904300926Z"
+ DESCRIPTION	"Rev 0.1 30 Apr 09
+		Initial version"
+
+	::= { rmds 5 }
+		
+		      reuters	OBJECT IDENTIFIER ::= { enterprises 67 }
+			  mds   OBJECT IDENTIFIER ::= { reuters 14 }
+			 rmds   OBJECT IDENTIFIER ::= { mds 1 }
+
+		     adhTable	OBJECT-TYPE
+                       SYNTAX   SEQUENCE OF AdhEntry
+                   MAX-ACCESS   not-accessible
+                       STATUS   current
+                       DESCRIPTION
+				"A list of adh variables"
+			::= { adh 1 }
+
+                     adhEntry	OBJECT-TYPE
+	               SYNTAX	AdhEntry
+	           MAX-ACCESS	not-accessible
+	               STATUS	current
+	               DESCRIPTION
+				"Variables of adh"
+	               INDEX	{ adhInstance }
+			::= { adhTable 1 }
+
+	       AdhEntry ::= SEQUENCE {
+		     adhInstance	OCTET STRING,
+		      adhVersion	OCTET STRING,
+		    adhStartTime	OCTET STRING,
+		         adhPath	OCTET STRING,
+		   adhConfigFile	OCTET STRING,
+		    adhProcessID	Integer32,
+		     adhUserName	OCTET STRING,
+		    adhGroupName	OCTET STRING,
+	       adhHealthCapacity	Integer32,
+		        adhState	OCTET STRING,
+
+	    adhInboundUpdateRate	Integer32,
+	   adhInboundRefreshRate	Integer32,
+	   adhOutboundUpdateRate	Integer32,
+	  adhOutboundRefreshRate	Integer32,
+		adhUpdateLatency	Integer32,
+	       adhRefreshLatency	Integer32,
+	    adhInboundInsertRate	Integer32,
+	   adhOutboundInsertRate	Integer32,
+		adhInsertLatency	Integer32,
+
+		adhBadMount		Integer32,
+		adhDisconnects		Integer32,
+		adhPingDisconnects	Integer32,
+		adhMountsAccepted	Integer32,
+		adhMountsRejected	Integer32,
+		adhRsslMountsAccepted	Integer32,
+		adhRsslMountsRejected	Integer32,
+		adhBroadcast		Integer32,
+		adhClose		Integer32,
+		adhGlobalStatus		Integer32,
+		adhGroupChange		Integer32,
+		adhGroupMerge		Integer32,
+		adhGroupStatus		Integer32,
+		adhImage		Integer32,
+		adhLoad			Integer32,
+		adhLock			Integer32,
+		adhOpenWindow		Integer32,
+		adhReady		Integer32,
+		adhRename		Integer32,
+		adhStatus		Integer32,
+		adhUpdate		Integer32,
+		adhPingAck		Integer32,
+		adhInsertAck		Integer32,
+		adhInsertNak		Integer32,
+		adhObsolete		Integer32,
+		adhUnknown		Integer32,
+		adhActive		Integer32,
+		adhStandby		Integer32,
+		adhOutMsgClose		Integer32,
+		adhHaltUpdates		Integer32,
+		adhInsert		Integer32,
+		adhOpen			Integer32,
+		adhOverflows		Integer32,
+		adhPing			Integer32,
+		adhPriority		Integer32,
+		adhCloseNak		Integer32,
+		adhImageNak		Integer32,
+		adhOpenNak		Integer32,
+		adhRenameNak		Integer32,
+		adhStatusNak		Integer32,
+		adhUpdateNak		Integer32,
+
+		adhRvQueueCount		Integer32,
+		adhMaxEventsOnQueue	Integer32,
+		adhHotStandby           TruthValue,
+		adhShutdown		TruthValue
+		}
+
+		     adhInstance	OBJECT-TYPE
+		       SYNTAX	OCTET STRING (SIZE(0..255))
+		   MAX-ACCESS   read-only
+		       STATUS	current
+		       DESCRIPTION
+				"The instance of the adh process."
+			::= { adhEntry 1 }
+
+		      adhVersion	OBJECT-TYPE
+		       SYNTAX   OCTET STRING
+		   MAX-ACCESS   read-only
+		       STATUS   current
+		       DESCRIPTION
+				"The version of the executable."
+			::= { adhEntry 2 }
+
+		    adhStartTime	OBJECT-TYPE
+		       SYNTAX   OCTET STRING
+		   MAX-ACCESS   read-only
+		       STATUS   current
+                       DESCRIPTION
+				"The start time of the adh process."
+			::= { adhEntry 3 }
+
+			 adhPath	OBJECT-TYPE
+		       SYNTAX   OCTET STRING
+		   MAX-ACCESS   read-only
+		       STATUS   current
+		       DESCRIPTION
+				"The executable path name."
+			::= { adhEntry 4 }
+
+		   adhConfigFile	OBJECT-TYPE
+		       SYNTAX   OCTET STRING
+		   MAX-ACCESS   read-only
+		       STATUS   current
+		       DESCRIPTION
+				"The location of the configuration database being used by this process."
+			::= { adhEntry 5 }
+
+		    adhProcessID	OBJECT-TYPE
+		       SYNTAX   Integer32
+	           MAX-ACCESS   read-only
+		       STATUS   current
+		       DESCRIPTION
+				"The process identifier."
+			::= { adhEntry 6 }
+
+		     adhUserName	OBJECT-TYPE
+		       SYNTAX   OCTET STRING
+		   MAX-ACCESS   read-only
+		       STATUS   current
+		       DESCRIPTION
+				"The user name."
+			::= { adhEntry 7 }
+
+		    adhGroupName	OBJECT-TYPE
+		       SYNTAX   OCTET STRING
+		   MAX-ACCESS   read-only
+		       STATUS   current
+		       DESCRIPTION
+				"The group name."
+			::= { adhEntry 8 }
+
+	       adhHealthCapacity	OBJECT-TYPE
+		       SYNTAX   INTEGER {
+			     healthy(1),
+	                     burdened(2),
+	                     heavilyBurdened(3),
+	                     dead(4)
+		       }
+		   MAX-ACCESS   read-only
+		       STATUS   current
+		       DESCRIPTION
+				"This is a measure of the load on the adh process."
+			::= { adhEntry 9 }
+
+			adhState	OBJECT-TYPE
+		       SYNTAX   OCTET STRING
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The state of the adh."
+			::= { adhEntry 10 }
+
+	 adhInboundUpdateRate	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of inbound updates received during last second."
+			::= { adhEntry 11 }
+
+	adhInboundRefreshRate	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of inbound images received during last second."
+			::= { adhEntry 12 }
+
+	adhOutboundUpdateRate	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of outbound updates received during last second."
+			::= { adhEntry 13 }
+
+       adhOutboundRefreshRate	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of outbound images received during last second."
+			::= { adhEntry 14 }
+
+             adhUpdateLatency	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The average number of micro-seconds to process updates during last second."
+			::= { adhEntry 15 }
+
+            adhRefreshLatency	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The average number of micro-seconds to process images during last second."
+			::= { adhEntry 16 }
+
+         adhInboundInsertRate	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of inbound inserts received during last second."
+			::= { adhEntry 17 }
+
+        adhOutboundInsertRate	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of outbound inserts received during last second."
+			::= { adhEntry 18 }
+
+             adhInsertLatency	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The average number of micro-seconds to process inserts during last second."
+			::= { adhEntry 19 }
+
+                  adhBadMount	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of bad mount messages received."
+			::= { adhEntry 20 }
+
+               adhDisconnects	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The total number of times a source application disconnected."
+			::= { adhEntry 21 }
+
+           adhPingDisconnects	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of times a source application was disconnected due to a loss of heartbeat messages."
+			::= { adhEntry 22 }
+
+            adhMountsAccepted	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The total application connects accepted."
+			::= { adhEntry 23 }
+
+            adhMountsRejected	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The total application connects rejected."
+			::= { adhEntry 24 }
+
+        adhRsslMountsAccepted	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of RSSL mounts accepted."
+			::= { adhEntry 25 }
+
+        adhRsslMountsRejected	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of RSSL mounts rejected."
+			::= { adhEntry 26 }
+
+                 adhBroadcast	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of broadcast messages received."
+			::= { adhEntry 27 }
+
+                     adhClose	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of close messages received."
+			::= { adhEntry 28 }
+
+              adhGlobalStatus	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of global status messages received."
+			::= { adhEntry 29 }
+
+               adhGroupChange	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of group changed messages received."
+			::= { adhEntry 30 }
+
+                adhGroupMerge	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of group merge messages received."
+			::= { adhEntry 31 }
+
+               adhGroupStatus	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of group status messages received."
+			::= { adhEntry 32 }
+
+                     adhImage	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of images received."
+			::= { adhEntry 33 }
+
+                      adhLoad	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of load messages received."
+			::= { adhEntry 34 }
+
+                      adhLock	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of lock messages received."
+			::= { adhEntry 35 }
+
+                adhOpenWindow	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of OpenWindow messages received."
+			::= { adhEntry 36 }
+
+                     adhReady	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of source ready messages received."
+			::= { adhEntry 37 }
+
+                    adhRename	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of rename messages received."
+			::= { adhEntry 38 }
+
+                    adhStatus	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of status messages received."
+			::= { adhEntry 39 }
+
+                    adhUpdate	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of update messages received."
+			::= { adhEntry 40 }
+
+                   adhPingAck	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of ping acknowledgement messages received."
+			::= { adhEntry 41 }
+
+                 adhInsertAck	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of insert acknowledgement messages received."
+			::= { adhEntry 42 }
+
+                 adhInsertNak	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of insert negative acknowledgement messages received."
+			::= { adhEntry 43 }
+
+                  adhObsolete	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of obsolete messages received."
+			::= { adhEntry 44 }
+
+                   adhUnknown	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of unrecognized messages received."
+			::= { adhEntry 45 }
+
+                    adhActive	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of active messages sent."
+			::= { adhEntry 46 }
+
+                   adhStandby	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of standby messages sent."
+			::= { adhEntry 47 }
+
+               adhOutMsgClose	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of close messages sent."
+			::= { adhEntry 48 }
+
+               adhHaltUpdates	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of halt update messages sent."
+			::= { adhEntry 49 }
+
+                    adhInsert	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of insert messages sent."
+			::= { adhEntry 50 }
+
+                      adhOpen	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of open messages sent."
+			::= { adhEntry 51 }
+
+                 adhOverflows	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of times a source channel overflowed."
+			::= { adhEntry 52 }
+
+                      adhPing	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of ping request messages sent."
+			::= { adhEntry 53 }
+
+                  adhPriority	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of priority messages sent."
+			::= { adhEntry 54 }
+
+                  adhCloseNak	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of close negative acknowledgement messages sent."
+			::= { adhEntry 55 }
+
+                  adhImageNak	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of image negative acknowledgement messages sent."
+			::= { adhEntry 56 }
+
+                  adhOpenNak	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of open negative acknowledgement messages sent."
+			::= { adhEntry 57 }
+
+                 adhRenameNak	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of rename negative acknowledgement messages sent."
+			::= { adhEntry 58 }
+
+                 adhStatusNak	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of status negative acknowledgement messages sent."
+			::= { adhEntry 59 }
+
+                 adhUpdateNak	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of update negative acknowledgement messages sent."
+			::= { adhEntry 60 }
+
+              adhRvQueueCount	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The number of packets to be processed on inbound queue."
+			::= { adhEntry 61 }
+
+          adhMaxEventsOnQueue	OBJECT-TYPE
+		       SYNTAX   Integer32
+		   MAX-ACCESS   read-only
+		       STATUS   current
+			DESCRIPTION
+				"The maximum number of inbound messages on queue."
+			::= { adhEntry 62 }
+
+                  adhHotStandby	OBJECT-TYPE
+		       SYNTAX   TruthValue {
+				true(1),
+				false(0)
+			}
+		   MAX-ACCESS   read-write
+		       STATUS   current
+			DESCRIPTION
+				"Can this distributor support Hot-Standby connections?"
+			::= { adhEntry 63 }
+
+		  adhShutdown	OBJECT-TYPE
+		       SYNTAX   TruthValue {
+				true(1),
+				false(0)
+			}
+		   MAX-ACCESS   read-write
+		       STATUS   current
+			DESCRIPTION
+				"Terminates the adh process."
+			::= { adhEntry 64 }
+
+--
+-- RTRManagedServiceTable
+--
+
+       rtrManagedServiceTable	OBJECT-TYPE
+                       SYNTAX   SEQUENCE OF RTRManagedServiceEntry
+                   MAX-ACCESS   not-accessible
+                       STATUS   current
+                       DESCRIPTION
+				"A list of RTRManagedService"
+			::= { adh 90 }
+
+              rtrManagedServiceEntry	OBJECT-TYPE
+	               SYNTAX	RTRManagedServiceEntry
+	           MAX-ACCESS	not-accessible
+	               STATUS	current
+	               DESCRIPTION
+				"Information of Class RTRManagedService"
+	               INDEX	{ adhInstance, mSname }
+			::= { rtrManagedServiceTable 1 }
+
+ RTRManagedServiceEntry ::= SEQUENCE {
+
+		mSname		OCTET STRING,
+		mSserviceID	Integer32,
+		mSserviceState	OCTET STRING,
+		mSservers	Integer32,
+		mSmaxCache	Integer32,
+		mSopenWindow	Integer32,
+		mSdataType	OCTET STRING,
+		mScacheType	OCTET STRING
+		}
+
+	               mSname	OBJECT-TYPE
+                       SYNTAX   OCTET STRING (SIZE(0..255))
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The name of the service."
+			::= { rtrManagedServiceEntry 1 }
+
+                  mSserviceID	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The service identifier for the service."
+			::= { rtrManagedServiceEntry 2 }
+
+               mSserviceState	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The service state."
+			::= { rtrManagedServiceEntry 3 }
+
+                    mSservers	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The number of servers in this service."
+			::= { rtrManagedServiceEntry 4 }
+
+                   mSmaxCache	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The maximum number of items the server can maintain in cache."
+			::= { rtrManagedServiceEntry 5 }
+
+                 mSopenWindow	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The maximum number of new image requests it can respond to at one time."
+			::= { rtrManagedServiceEntry 6 }
+
+                   mSdataType	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The type of data the server is providing."
+			::= { rtrManagedServiceEntry 7 }
+
+                  mScacheType	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The type of cache the server is providing."
+			::= { rtrManagedServiceEntry 8 }
+
+--
+-- RTRManagedServerTable
+--
+
+        rtrManagedServerTable	OBJECT-TYPE
+                       SYNTAX   SEQUENCE OF RTRManagedServerEntry
+                   MAX-ACCESS   not-accessible
+                       STATUS   current
+                       DESCRIPTION
+				"A list of RTRManagedServer"
+			::= { adh 91 }
+
+              rtrManagedServerEntry	OBJECT-TYPE
+	               SYNTAX	RTRManagedServerEntry
+	           MAX-ACCESS	not-accessible
+	               STATUS	current
+	               DESCRIPTION
+				"Information of Class RTRManagedServer"
+	               INDEX	{ adhInstance, mSrvserverID }
+			::= { rtrManagedServerTable 1 }
+
+  RTRManagedServerEntry ::= SEQUENCE {
+
+	mSrvserverID		Integer32,
+	mSrvname		OCTET STRING,
+	mSrvserviceID		Integer32,
+	mSrvserverState		OCTET STRING,
+	mSrvoperatingMode	OCTET STRING,
+	mSrvmaxCache		Integer32,
+	mSrvopenWindow		Integer32,
+	mSrvload		Integer32,
+	mSrvmaxLoadLevel	Integer32,
+	mSrvoverflow		TruthValue,
+	mSrvoverflows		Integer32,
+	mSrvdataType		OCTET STRING,
+	mSrvcacheType		OCTET STRING,
+	mSrvlockItemThreshold	Integer32,
+	mSrvactive		Integer32,
+	mSrvstale		Integer32,
+	mSrvitems		Integer32,
+	mSrvpending		Integer32,
+	mSrvpendingOut		Integer32,
+	mSrvopens		Integer32,
+	mSrvpreemptionCloses	Integer32,
+	mSrvrecoverableCloses	Integer32
+		}
+
+	         mSrvserverID	OBJECT-TYPE
+                       SYNTAX   Integer32 (0..65535)
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The server identifier for the server."
+			::= { rtrManagedServerEntry 1 }
+
+	             mSrvname	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The service name for the server."
+			::= { rtrManagedServerEntry 2 }
+
+	        mSrvserviceID	OBJECT-TYPE
+                       SYNTAX   Integer32 (0..65535)
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The service identifier for the service."
+			::= { rtrManagedServerEntry 3 }
+
+	      mSrvserverState	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The server state."
+			::= { rtrManagedServerEntry 4 }
+
+	    mSrvoperatingMode	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The operating mode of the server."
+			::= { rtrManagedServerEntry 5 }
+
+	         mSrvmaxCache	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The maximum number of items the server can maintain in cache."
+			::= { rtrManagedServerEntry 6 }
+
+	       mSrvopenWindow	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The maximum number of new image requests it can respond to at one time."
+			::= { rtrManagedServerEntry 7 }
+
+	             mSrvload	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The load level of the server."
+			::= { rtrManagedServerEntry 8 }
+
+	     mSrvmaxLoadLevel	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The maximum load possible for the server."
+			::= { rtrManagedServerEntry 9 }
+
+	         mSrvoverflow	OBJECT-TYPE
+		       SYNTAX   TruthValue {
+				true(1),
+				false(0)
+			}
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"Is this server in an overflow condition?"
+			::= { rtrManagedServerEntry 10 }
+
+	        mSrvoverflows	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The number of times the server has overflowed."
+			::= { rtrManagedServerEntry 11 }
+
+	         mSrvdataType	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The type of data the server is providing."
+			::= { rtrManagedServerEntry 12 }
+
+	        mSrvcacheType	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The type of cache the server is providing."
+			::= { rtrManagedServerEntry 13 }
+
+	mSrvlockItemThreshold	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"Lock items with priority class greater or equal to this value."
+			::= { rtrManagedServerEntry 14 }
+
+	           mSrvactive	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The number of items currently active on the server."
+			::= { rtrManagedServerEntry 15 }
+
+	            mSrvstale	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The number of items currently stale on the server."
+			::= { rtrManagedServerEntry 16 }
+
+	            mSrvitems	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The number of items currently on the server."
+			::= { rtrManagedServerEntry 17 }
+
+	          mSrvpending	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The number of items waiting for a request to be sent."
+			::= { rtrManagedServerEntry 18 }
+
+	       mSrvpendingOut	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The number of items that are waiting for a response."
+			::= { rtrManagedServerEntry 19 }
+
+	            mSrvopens	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The number of open requests made."
+			::= { rtrManagedServerEntry 20 }
+
+	 mSrvpreemptionCloses	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The total number of items that were closed due to preemptions."
+			::= { rtrManagedServerEntry 21 }
+
+	mSrvrecoverableCloses	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The total number of items that were closed due to recoverable reasons."
+			::= { rtrManagedServerEntry 22 }
+
+
+--
+-- ProxySSLSourceApplication
+--
+
+     proxySSLSourceApplicationTable	OBJECT-TYPE
+                       SYNTAX   SEQUENCE OF ProxySSLSourceApplicationEntry
+                   MAX-ACCESS   not-accessible
+                       STATUS   current
+                       DESCRIPTION
+				"A list of proxySSLSourceApplication"
+			::= { adh 92 }
+
+     proxySSLSourceApplicationEntry	OBJECT-TYPE
+	               SYNTAX	ProxySSLSourceApplicationEntry
+	           MAX-ACCESS	not-accessible
+	               STATUS	current
+	               DESCRIPTION
+				"Information of Class ProxySSLSourceApplication"
+	               INDEX	{ adhInstance, prxySSLSrcAppidentifier }
+			::= { proxySSLSourceApplicationTable 1 }
+
+ProxySSLSourceApplicationEntry ::= SEQUENCE {
+           prxySSLSrcAppidentifier	OCTET STRING,
+          prxySSLSrcAppserviceName	OCTET STRING,
+              prxySSLSrcAppappName	OCTET STRING,
+    prxySSLSrcAppinboundUpdateRate	Integer32,
+   prxySSLSrcAppinboundRefreshRate	Integer32,
+   prxySSLSrcAppoutboundInsertRate	Integer32,
+        prxySSLSrcAppinsertLatency	Integer32,
+	    prxySSLSrcAppcacheType	OCTET STRING,
+	      prxySSLSrcAppcaching	TruthValue,
+	     prxySSLSrcAppdataType	OCTET STRING,
+	      prxySSLSrcAppinserts	TruthValue,
+	     prxySSLSrcAppinstance	OCTET STRING,
+	   prxySSLSrcAppopenWindow	Integer32,
+	     prxySSLSrcAppoverflow	TruthValue,
+		 prxySSLSrcAppping	TruthValue,
+   prxySSLSrcApppreemptionLocation	OCTET STRING,
+	  prxySSLSrcAppconnectTime	OCTET STRING,
+	      prxySSLSrcAppversion	OCTET STRING,
+	    prxySSLSrcAppbroadcast	Integer32,
+		prxySSLSrcAppclose	Integer32,
+	 prxySSLSrcAppglobalStatus	Integer32,
+	  prxySSLSrcAppgroupChange	Integer32,
+	   prxySSLSrcAppgroupMerge	Integer32,
+	  prxySSLSrcAppgroupStatus	Integer32,
+		prxySSLSrcAppimage	Integer32,
+		 prxySSLSrcAppload	Integer32,
+		 prxySSLSrcApplock	Integer32,
+      prxySSLSrcAppInMsgopenWindow	Integer32,
+		prxySSLSrcAppready	Integer32,
+	       prxySSLSrcApprename	Integer32,
+	       prxySSLSrcAppstatus	Integer32,
+	       prxySSLSrcAppupdate	Integer32,
+	      prxySSLSrcApppingAck	Integer32,
+	    prxySSLSrcAppinsertAck	Integer32,
+	    prxySSLSrcAppinsertNak	Integer32,
+	     prxySSLSrcAppobsolete	Integer32,
+	      prxySSLSrcAppunknown	Integer32,
+	       prxySSLSrcAppactive	Integer32,
+	      prxySSLSrcAppstandby	Integer32,
+          prxySSLSrcAppOutMsgclose	Integer32,
+	  prxySSLSrcApphaltUpdates	Integer32,
+	       prxySSLSrcAppinsert	Integer32,
+	         prxySSLSrcAppopen	Integer32,
+	    prxySSLSrcAppoverflows	Integer32,
+   	   prxySSLSrcAppOutMsgping	Integer32,
+	     prxySSLSrcApppriority	Integer32,
+	     prxySSLSrcAppcloseNak	Integer32,
+	     prxySSLSrcAppimageNak	Integer32,
+	      prxySSLSrcAppopenNak	Integer32,
+	    prxySSLSrcApprenameNak	Integer32,
+	    prxySSLSrcAppstatusNak	Integer32,
+	    prxySSLSrcAppupdateNak	Integer32,
+	    prxySSLSrcAppipcRoute	OCTET STRING,
+	    prxySSLSrcAppappState	OCTET STRING
+		}
+
+      prxySSLSrcAppidentifier	OBJECT-TYPE
+                       SYNTAX	OCTET STRING (SIZE(0..255))
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"A unique identifier for the server."
+			::= { proxySSLSourceApplicationEntry 1 }
+
+     prxySSLSrcAppserviceName	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The service name."
+			::= { proxySSLSourceApplicationEntry 2 }
+
+         prxySSLSrcAppappName	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The name of the application which is mounted."
+			::= { proxySSLSourceApplicationEntry 3 }
+
+prxySSLSrcAppinboundUpdateRate	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The inbound update rate from Src App."
+			::= { proxySSLSourceApplicationEntry 4 }
+
+prxySSLSrcAppinboundRefreshRate	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The inbound refresh rate from Src App."
+			::= { proxySSLSourceApplicationEntry 5 }
+
+prxySSLSrcAppoutboundInsertRate	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The outbound insert rate to Src App."
+			::= { proxySSLSourceApplicationEntry 6 }
+
+   prxySSLSrcAppinsertLatency	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The average number of micro-seconds to process inserts during last second."
+			::= { proxySSLSourceApplicationEntry 7 }
+		 
+       prxySSLSrcAppcacheType	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The cache type the application is providing."
+			::= { proxySSLSourceApplicationEntry 8 }
+
+         prxySSLSrcAppcaching	OBJECT-TYPE
+		       SYNTAX   TruthValue {
+				true(1),
+				false(0)
+			}
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"Is the application doing item caching?"
+			::= { proxySSLSourceApplicationEntry 9 }
+
+        prxySSLSrcAppdataType	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The data type the application is providing."
+			::= { proxySSLSourceApplicationEntry 10 }
+
+         prxySSLSrcAppinserts	OBJECT-TYPE
+		       SYNTAX   TruthValue {
+				true(1),
+				false(0)
+			}
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"Does the application support inserts?"
+			::= { proxySSLSourceApplicationEntry 11 }
+
+        prxySSLSrcAppinstance	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The instance key of the application."
+			::= { proxySSLSourceApplicationEntry 12 }
+   
+      prxySSLSrcAppopenWindow	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The maximum number of image requests the service can handle at once."
+			::= { proxySSLSourceApplicationEntry 13 }
+
+        prxySSLSrcAppoverflow	OBJECT-TYPE
+		       SYNTAX   TruthValue {
+				true(1),
+				false(0)
+			}
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"Is the application in an overflow condition?"
+			::= { proxySSLSourceApplicationEntry 14 }
+
+            prxySSLSrcAppping	OBJECT-TYPE
+		       SYNTAX   TruthValue {
+				true(1),
+				false(0)
+			}
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"Does the application send heartbeat messages?"
+			::= { proxySSLSourceApplicationEntry 15 }
+
+prxySSLSrcApppreemptionLocation	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The location of preemption."
+			::= { proxySSLSourceApplicationEntry 16 }
+
+     prxySSLSrcAppconnectTime	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The date/time of the application connected."
+			::= { proxySSLSourceApplicationEntry 17 }
+
+         prxySSLSrcAppversion	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The SSL version of the application."
+			::= { proxySSLSourceApplicationEntry 18 }
+
+       prxySSLSrcAppbroadcast	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of broadcast messages received."
+			::= { proxySSLSourceApplicationEntry 19 }
+
+           prxySSLSrcAppclose	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of close messages received."
+			::= { proxySSLSourceApplicationEntry 20 }
+
+    prxySSLSrcAppglobalStatus	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of global status messages received."
+			::= { proxySSLSourceApplicationEntry 21 }
+
+     prxySSLSrcAppgroupChange	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of group changed messages received."
+			::= { proxySSLSourceApplicationEntry 22 }
+
+      prxySSLSrcAppgroupMerge	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of group merge messages received."
+			::= { proxySSLSourceApplicationEntry 23 }
+
+     prxySSLSrcAppgroupStatus	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of group status messages received."
+			::= { proxySSLSourceApplicationEntry 24 }
+
+           prxySSLSrcAppimage	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of images received."
+			::= { proxySSLSourceApplicationEntry 25 }
+
+            prxySSLSrcAppload	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of load messages received."
+			::= { proxySSLSourceApplicationEntry 26 }
+
+            prxySSLSrcApplock	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of lock messages received."
+			::= { proxySSLSourceApplicationEntry 27 }
+
+ prxySSLSrcAppInMsgopenWindow	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of OpenWindow messages received."
+			::= { proxySSLSourceApplicationEntry 28 }
+
+           prxySSLSrcAppready	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of source ready messages received."
+			::= { proxySSLSourceApplicationEntry 29 }
+
+          prxySSLSrcApprename	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of rename messages received."
+			::= { proxySSLSourceApplicationEntry 30 }
+
+          prxySSLSrcAppstatus	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of status messages received."
+			::= { proxySSLSourceApplicationEntry 31 }
+
+          prxySSLSrcAppupdate	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of update messages received."
+			::= { proxySSLSourceApplicationEntry 32 }
+
+         prxySSLSrcApppingAck	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of ping acknowledgement messages received."
+			::= { proxySSLSourceApplicationEntry 33 }
+
+       prxySSLSrcAppinsertAck	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of insert acknowledgement messages received."
+			::= { proxySSLSourceApplicationEntry 34 }
+
+       prxySSLSrcAppinsertNak	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of insert negative acknowledgement messages received."
+			::= { proxySSLSourceApplicationEntry 35 }
+
+       prxySSLSrcAppobsolete	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of obsolete messages received."
+			::= { proxySSLSourceApplicationEntry 36 }
+
+         prxySSLSrcAppunknown	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of unrecognized messages received."
+			::= { proxySSLSourceApplicationEntry 37 }
+
+          prxySSLSrcAppactive	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of active messages sent."
+			::= { proxySSLSourceApplicationEntry 38 }
+
+         prxySSLSrcAppstandby	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of standby messages sent."
+			::= { proxySSLSourceApplicationEntry 39 }
+
+     prxySSLSrcAppOutMsgclose	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of close messages sent."
+			::= { proxySSLSourceApplicationEntry 40 }
+
+     prxySSLSrcApphaltUpdates	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of halt update messages sent."
+			::= { proxySSLSourceApplicationEntry 41 }
+
+          prxySSLSrcAppinsert	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of insert messages sent."
+			::= { proxySSLSourceApplicationEntry 42 }
+
+            prxySSLSrcAppopen	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of open messages sent."
+			::= { proxySSLSourceApplicationEntry 43 }
+
+       prxySSLSrcAppoverflows	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of messages written to a source channel which have overflowed."
+			::= { proxySSLSourceApplicationEntry 44 }
+
+      prxySSLSrcAppOutMsgping	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of ping request messages sent."
+			::= { proxySSLSourceApplicationEntry 45 }
+
+        prxySSLSrcApppriority	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of priority messages sent."
+			::= { proxySSLSourceApplicationEntry 46 }
+
+        prxySSLSrcAppcloseNak	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of close negative acknowledgement messages sent."
+			::= { proxySSLSourceApplicationEntry 47 }
+
+        prxySSLSrcAppimageNak	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of image negative acknowledgement messages sent."
+			::= { proxySSLSourceApplicationEntry 48 }
+
+         prxySSLSrcAppopenNak	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of open negative acknowledgement messages sent."
+			::= { proxySSLSourceApplicationEntry 49 }
+
+       prxySSLSrcApprenameNak	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of rename negative acknowledgement messages sent."
+			::= { proxySSLSourceApplicationEntry 50 }
+
+       prxySSLSrcAppstatusNak	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of status negative acknowledgement messages sent."
+			::= { proxySSLSourceApplicationEntry 51 }
+
+       prxySSLSrcAppupdateNak	OBJECT-TYPE
+                       SYNTAX	Integer32
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The number of update negative acknowledgement messages sent."
+			::= { proxySSLSourceApplicationEntry 52 }
+
+       prxySSLSrcAppipcRoute	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"IPC route name"
+			::= { proxySSLSourceApplicationEntry 53 }
+
+       prxySSLSrcAppappState	OBJECT-TYPE
+                       SYNTAX	OCTET STRING
+                   MAX-ACCESS	read-only
+                       STATUS	current
+                       DESCRIPTION
+				"The application state"
+			::= { proxySSLSourceApplicationEntry 54 }
+
+--
+-- Class Server.SrcDist
+--
+
+           serverSrcDistTable	OBJECT-TYPE
+                       SYNTAX   SEQUENCE OF ServerSrcDistEntry
+                   MAX-ACCESS   not-accessible
+                       STATUS   current
+                       DESCRIPTION
+				"A list of Server.SrcDist"
+			::= { adh 93 }
+
+           serverSrcDistEntry	OBJECT-TYPE
+	               SYNTAX	ServerSrcDistEntry
+	           MAX-ACCESS	not-accessible
+	               STATUS	current
+	               DESCRIPTION
+				"Information of Class Server.SrcDist"
+	               INDEX	{ adhInstance, sSserverID }
+			::= { serverSrcDistTable 1 }
+
+     ServerSrcDistEntry ::= SEQUENCE {
+	           sSserverID	OCTET STRING,
+	 sSoutboundUpdateRate	Integer32,
+	sSoutboundRefreshRate	Integer32,
+	      sSupdateLatency	Integer32,
+	     sSrefreshLatency	Integer32,
+	  sSinboundInsertRate	Integer32,
+	    sSbacklogOverflow	Integer32,
+      sSfailoverMatchFailures	Integer32
+
+		}
+
+                   sSserverID	OBJECT-TYPE
+                       SYNTAX   OCTET STRING (SIZE(0..255))
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The server identifier for the server."
+			::= { serverSrcDistEntry 1 }
+
+	 sSoutboundUpdateRate	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The outbound update rate to RRMP."
+			::= { serverSrcDistEntry 2 }
+
+        sSoutboundRefreshRate	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The outbound refresh rate to RRMP."
+			::= { serverSrcDistEntry 3 }
+
+              sSupdateLatency	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The average number of micro-seconds to process updates during last second."
+			::= { serverSrcDistEntry 4 }
+
+             sSrefreshLatency	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The average number of micro-seconds to process images during last second."
+			::= { serverSrcDistEntry 5 }
+
+          sSinboundInsertRate	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"The inbound insert rate from RRMP."
+			::= { serverSrcDistEntry 6 }
+
+            sSbacklogOverflow	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"Number of backlog buffer overflows."
+			::= { serverSrcDistEntry 7 }
+
+      sSfailoverMatchFailures	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"Number of update match failures during failover."
+			::= { serverSrcDistEntry 8 }
+
+--
+-- Class ManagedCommLink
+--
+
+         managedCommLinkTable	OBJECT-TYPE
+                       SYNTAX   SEQUENCE OF ManagedCommLinkEntry
+                   MAX-ACCESS   not-accessible
+                       STATUS   current
+                       DESCRIPTION
+				"A list of ManagedCommLink"
+			::= { adh 94 }
+
+         managedCommLinkEntry	OBJECT-TYPE
+	               SYNTAX	ManagedCommLinkEntry
+	           MAX-ACCESS	not-accessible
+	               STATUS	current
+	               DESCRIPTION
+				"Information of Class ManagedCommLink"
+	               INDEX	{ adhInstance, mCLlinkID }
+			::= { managedCommLinkTable 1 }
+
+   ManagedCommLinkEntry ::= SEQUENCE {
+	            mCLlinkID	OCTET STRING,
+	          mCLserverId	Integer32,
+	          mCLpriority	Integer32,
+ 	             mCLstate	OCTET STRING,
+	            mCLhealth	OCTET STRING
+		}
+
+                    mCLlinkID	OBJECT-TYPE
+                       SYNTAX   OCTET STRING (SIZE(0..255))
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"An unique identifier for the link."
+			::= { managedCommLinkEntry 1 }
+
+                  mCLserverId	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"Server containing communication link."
+			::= { managedCommLinkEntry 2 }
+
+                  mCLpriority	OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"Priority of communication link."
+			::= { managedCommLinkEntry 3 }
+
+                     mCLstate	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"Upstream state of communication link."
+			::= { managedCommLinkEntry 4 }
+
+                    mCLhealth	OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+				"Health of communication link."
+			::= { managedCommLinkEntry 5 }
+
+--
+-- Class SSLRoute
+--
+
+         sslRouteTable   OBJECT-TYPE
+                       SYNTAX   SEQUENCE OF SslRouteEntry
+                   MAX-ACCESS   not-accessible
+                       STATUS   current
+                       DESCRIPTION
+                                "A list of SSLRoute"
+                        ::= { adh 95 }
+
+         sslRouteEntry   OBJECT-TYPE
+                       SYNTAX   SslRouteEntry
+                   MAX-ACCESS   not-accessible
+                       STATUS   current
+                       DESCRIPTION
+                                "Information of Class SSLRoute"
+                       INDEX    { adhInstance, sslRouterouteName }
+                        ::= { sslRouteTable 1 }
+
+   SslRouteEntry ::= SEQUENCE {
+                    sslRouterouteName   OCTET STRING,
+--                   sslRouteportName     OCTET STRING,
+                   sslRouteportNumber  OCTET STRING,
+                    sslRoutehostList   OCTET STRING
+--                    sslRouteprotocol   OCTET STRING
+                }
+
+                    sslRouterouteName   OBJECT-TYPE
+                       SYNTAX   OCTET STRING (SIZE(0..255))
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+                                "route name."
+                        ::= { sslRouteEntry 1 }
+
+--                    sslRouteportName   OBJECT-TYPE
+--                       SYNTAX   OCTET STRING
+--                   MAX-ACCESS   read-only
+--                       STATUS   current
+--                       DESCRIPTION
+--                                "port name."
+--                        ::= { sslRouteEntry 2 }
+
+                    sslRouteportNumber   OBJECT-TYPE
+                       SYNTAX   Integer32
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+                                "port number."
+                        ::= { sslRouteEntry 2 }
+
+                    sslRoutehostList   OBJECT-TYPE
+                       SYNTAX   OCTET STRING
+                   MAX-ACCESS   read-only
+                       STATUS   current
+                       DESCRIPTION
+                                "host list."
+                        ::= { sslRouteEntry 3 }
+
+--                    sslRouteprotocol   OBJECT-TYPE
+--                       SYNTAX   OCTET STRING
+--                   MAX-ACCESS   read-only
+--                       STATUS   current
+--                       DESCRIPTION
+--                                "Protocol version."
+--                        ::= { sslRouteEntry 5 }
+
+END

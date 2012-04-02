@@ -1,0 +1,12 @@
+# use glob syntax.
+syntax: glob
+
+src/*.txt
+src/*.pl
+src/*.json
+
+# switch to regexp syntax.
+syntax: regexp
+
+^src/v\d+/
+^build/
